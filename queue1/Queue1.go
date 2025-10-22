@@ -23,6 +23,7 @@ func (q *Queue1[T]) Enqueue(data T) {
 	newNode := &node.Node[T]{
 		Data: data,
 		Next: nil,
+		Prev: q.Rear,
 	}
 
 	if q.Rear == nil {
@@ -44,10 +45,12 @@ func (q *Queue1[T]) Dequeue() (T, error) {
 	}
 
 	data := q.Front.Data
-	q.Front = q.Front.Next
-
-	if q.Front == nil {
+	if q.Size == 1{
+		q.Front = nil
 		q.Rear = nil
+	} else {
+		q.Front = q.Front.Next
+		q.Front.Prev = nil
 	}
 
 	q.Size--
@@ -55,7 +58,7 @@ func (q *Queue1[T]) Dequeue() (T, error) {
 }
 
 func (q *Queue1[T]) IsEmpty() bool {
-	return q.Front == nil
+	return q.Size == 0
 }
 
 func (q *Queue1[T]) Clear() {

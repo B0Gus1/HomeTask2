@@ -1,5 +1,7 @@
 package queue3
 
+import "errors"
+
 type Queue3[T any] struct {
 	Items    []T
 	Head     int
@@ -32,11 +34,11 @@ func (q *Queue3[T]) Enqueue(item T) {
 	q.Size++
 }
 
-func (q *Queue3[T]) Dequeue() (T, bool) {
+func (q *Queue3[T]) Dequeue() (T, error) {
 	var zero T
 
 	if q.IsEmpty() {
-		return zero, false
+		return zero, errors.New("очередь пуста")
 	}
 
 	item := q.Items[q.Head]
@@ -48,17 +50,17 @@ func (q *Queue3[T]) Dequeue() (T, bool) {
 		q.Resize(q.Capacity / 2)
 	}
 
-	return item, true
+	return item, nil
 }
 
-func (q *Queue3[T]) Peek() (T, bool) {
+func (q *Queue3[T]) Peek() (T, error) {
 	var zero T
 
 	if q.IsEmpty() {
-		return zero, false
+		return zero, errors.New("очередь пуста")
 	}
 
-	return q.Items[q.Head], true
+	return q.Items[q.Head], nil
 }
 
 func (q *Queue3[T]) IsEmpty() bool {
